@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { ThemeProvider } from 'emotion-theming';
 import Loader from '@components/loader/Loader';
 import AsyncComponent from '@components/async/AsyncComponent';
 
-import './main.scss';
+import { Global } from '@emotion/core';
+
+import * as theme from '@styles/variables';
+import styles from './main.style.js';
 
 const container = document.createElement('div');
 container.id = 'main';
 document.body.appendChild(container);
 
-class Main extends React.Component {
+class Main extends Component {
   constructor(props) {
     super(props);
 
@@ -18,14 +22,17 @@ class Main extends React.Component {
 
   render() {
     return (
-      <AsyncComponent
-        Loading={() => {
-          return (<Loader ref={this.loaderRef} />);
-        }}
-        resolve={() => 
-          import('./App')
-            .then(this.loaderRef.current.complete)}
-      />
+      <ThemeProvider theme={theme}>
+        <Global styles={styles} />
+        <AsyncComponent
+          Loading={() => {
+            return (<Loader ref={this.loaderRef} />);
+          }}
+          resolve={() => 
+            import('./App')
+              .then(this.loaderRef.current.complete)}
+        />
+      </ThemeProvider>
     );
   }
 }

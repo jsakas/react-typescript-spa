@@ -28,6 +28,7 @@ module.exports = {
         "react"
     ],
     "rules": {
+        "react/display-name": "off",
         "no-console": "off",
         "indent": [
             "error",

@@ -3,7 +3,9 @@ import { Router, Route, Switch } from 'react-router-dom';
 import { TransitionGroup, Transition } from 'react-transition-group';
 import history from '@history';
 import ROUTES from '@routes';
-import './App.scss';
+
+import withStyles from '@utils/withStyles';
+import styles from './App.style.js';
 
 const getBaseRoute = location => location.pathname.split('/').filter(i => i)[0];
 
@@ -59,4 +61,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withStyles(styles)(App);

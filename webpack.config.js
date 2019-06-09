@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const WebpackStats = require('webpack-visualizer-plugin');
 const { DefinePlugin } = require('webpack');
@@ -8,7 +7,7 @@ const { DefinePlugin } = require('webpack');
 
 module.exports = {
   mode: process.env.WEBPACK_ENV == 'production' ? 'production' : 'development',
-  devtool: process.env.WEBPACK_ENV == 'production' ? 'source-map' : 'none',
+  devtool: process.env.WEBPACK_ENV == 'production' ? 'source-map' : 'eval',
   stats: 'errors-only',
   devServer: {
     host: '0.0.0.0',
@@ -41,9 +40,6 @@ module.exports = {
       'APP_ENV': JSON.stringify(process.env.APP_ENV),
     }),
     new HtmlWebpackHarddiskPlugin(),
-    new ExtractCssChunks({
-      filename: '[hash].css'
-    }),
     new WebpackStats({
       filename: './bundle.html',
     }),
@@ -51,15 +47,14 @@ module.exports = {
   resolve: {
     alias: {
       '@components': path.resolve(__dirname, 'src', 'components'),
+      '@docs': path.resolve(__dirname, 'docs'),
+      '@history': path.resolve(__dirname, 'src', 'history'),
+      '@icons': path.resolve(__dirname, 'src', 'icons'),
       '@images': path.resolve(__dirname, 'src', 'images'),
       '@pages': path.resolve(__dirname, 'src', 'pages'),
-      'styles': path.resolve(__dirname, 'src', 'styles'),
-      '@history': path.resolve(__dirname, 'src', 'history'),
-      '@docs': path.resolve(__dirname, 'docs'),
-      '@utils': path.resolve(__dirname, 'src', 'utils'),
-      '@audio': path.resolve(__dirname, 'src', 'audio'),
-      '@icons': path.resolve(__dirname, 'src', 'icons'),
       '@routes': path.resolve(__dirname, 'src', 'routes'),
+      '@styles': path.resolve(__dirname, 'src', 'styles'),
+      '@utils': path.resolve(__dirname, 'src', 'utils'),
     },
   },
   module: {
@@ -77,14 +72,6 @@ module.exports = {
           'babel-loader',
           'markdown-to-react-loader',
         ],
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          ExtractCssChunks.loader,
-          'css-loader',
-          'sass-loader',
-        ]
       },
       {
         test: /\.(png|jpg|gif|wav|mp3)$/,

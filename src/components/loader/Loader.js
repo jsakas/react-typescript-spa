@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-
-import './Loader.scss';
+import React, { Component, Fragment } from 'react';
+import { Global } from '@emotion/core';
+import styles from './Loader.style.js';
 
 export const LoaderIcon = () => {
   return (
@@ -8,7 +8,7 @@ export const LoaderIcon = () => {
   );
 };
 
-export default class Loader extends Component {
+class Loader extends Component {
   constructor(props) {
     super(props);
 
@@ -27,11 +27,16 @@ export default class Loader extends Component {
 
   render() {
     return (
-      <div className="Loader">
-        <div className={`Loader__icon ${this.state.status}`}>
-          <LoaderIcon />
+      <Fragment>
+        <Global styles={styles} />
+        <div className="Loader">
+          <div className={`Loader__icon ${this.state.status}`}>
+            <LoaderIcon />
+          </div>
         </div>
-      </div>
+      </Fragment>
     );       
   }
 }
+
+export default Loader;

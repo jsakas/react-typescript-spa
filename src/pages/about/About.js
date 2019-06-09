@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
-import './About.scss';
+import withStyles from '@utils/withStyles';
+import styles from './About.style.js';
 
-export default class About extends Component {
+class About extends Component {
   render() {
     return (
       <div className="About">
@@ -14,4 +15,4 @@ export default class About extends Component {
   }
 }
 
-
+export default withStyles(styles)(About);
