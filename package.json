@@ -1,7 +1,7 @@
 {
-  "name": "react-webpack-spa-boilerplate",
+  "name": "react-emotion-spa",
   "version": "1.0.0",
-  "description": "A boiler plate for React SPAs bundled with Webpack",
+  "description": "A boilerplate for an SPA built with React & Emotion",
   "main": "src/index.js",
   "author": "jon.sakas@gmail.com",
   "license": "MIT",

@@ -1,3 +1,4 @@
-# React Webpack SPA Boilerplate
+# React, Emotion, Webpack SPA Boilerplate
 
-A boiler plate for React SPAs bundled with Webpack
+A boilerplate for an SPA built with React & Emotion.
+
