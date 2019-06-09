@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SPA Boilerplate</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="SPA Boilerplate">
+
+  <link rel="apple-touch-icon" href="<%= require('../images/icon.png') %>">
+  <link rel="apple-touch-icon" sizes="167x167" href="<%= require('../images/icon.png') %>">
+  <link rel="apple-touch-icon" sizes="152x152" href="<%= require('../images/icon.png') %>">
+  <link rel="apple-touch-icon" sizes="180x180" href="<%= require('../images/icon.png') %>">
+
+  <link rel="icon" type="image/png" href="<%= require('../images/icon.png') %>" sizes="16x16">
+  <link rel="icon" type="image/png" href="<%= require('../images/icon.png') %>" sizes="32x32">
+  <link rel="icon" type="image/png" href="<%= require('../images/icon.png') %>" sizes="96x96">
+
+  <% for (var chunk in htmlWebpackPlugin.options.head) { %>
+    <script src="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.head[chunk]].entry %>"></script>
+  <% } %>
+
+  <% for (file in htmlWebpackPlugin.files.css) { %> 
+    <link rel="stylesheet" href="<%= htmlWebpackPlugin.files.css[file] %>" />
+  <% } %>
+
+</head>
+<body>
+  <% for (var chunk in htmlWebpackPlugin.options.body) { %>
+    <script src="<%= htmlWebpackPlugin.files.chunks[htmlWebpackPlugin.options.body[chunk]].entry %>"></script>
+  <% } %>
+</body>
+</html>
