@@ -18,8 +18,8 @@ module.exports = {
     contentBase: path.join(__dirname, 'build'),
   },
   entry: {
-    main: './src/main.js',
-    sentry: './src/integrations/Sentry.js',
+    main: './src/main.tsx',
+    sentry: './src/integrations/Sentry.ts',
   },
   output: {
     filename: '[name].[hash].js',
@@ -59,6 +59,11 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
       {
         test: /\.m?js$/,
         exclude: /(node_modules)/,

@@ -36,6 +36,8 @@
     "jest": "24.8.0",
     "markdown-to-react-loader": "1.0.1",
     "path-to-regexp": "3.0.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
     "webpack": "4.33.0",
     "webpack-cli": "3.3.3",
     "webpack-dev-server": "3.7.1",
