@@ -1,4 +1,4 @@
-# React, Emotion, Webpack SPA Boilerplate
+# React, TypeScript, Webpack SPA Boilerplate
 
-A boilerplate for an SPA built with React & Emotion.
+A boilerplate for an SPA built with React & TypeScript
 

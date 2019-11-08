@@ -1,10 +1,39 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
-        "noImplicitAny": true,
-        "module": "es6",
+        "module": "esnext",
         "target": "es5",
         "jsx": "react",
-        "allowJs": true
-    }
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "allowJs": true,
+        "baseUrl": "./src",
+        "sourceMap": true,
+        "paths": {
+            "@components/*": ["components/*"],
+            "@history": ["history"],
+            "@icons/*": ["icons/*"],
+            "@images/*": ["images/*"],
+            "@pages/*": ["pages/*"],
+            "@routes": ["routes"],
+            "@styles/*": ["styles/*"],
+            "@utils/*": ["utils/*"]
+        }
+    },
+    "include": [
+        "./src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+        "**/*.test.ts"
+    ],
+    "types": [
+        "types"
+    ],
+    "typeRoots": [
+        "@types",
+        "@sentry",
+    ],
 }

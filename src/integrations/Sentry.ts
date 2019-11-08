@@ -1,5 +1,9 @@
-import { init } from '@sentry/browser';
+import * as Sentry from '@sentry/browser';
 
-APP_ENV == 'production' && init({
-  dsn: ''
-});
+if (APP_ENV === 'production') {
+  const config: Sentry.BrowserOptions = {
+    dsn: '',
+  };
+  
+  Sentry.init(config);
+}

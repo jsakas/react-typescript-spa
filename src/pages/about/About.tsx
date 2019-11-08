@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
+import useStyles from './About.style';
 
-import withStyles from '@utils/withStyles';
-import styles from './About.style.js';
+const About = () => {
+  const classes: Classes = useStyles();
 
-class About extends Component {
-  render() {
-    return (
-      <div className="About">
-        <div className="About__content">
-          <h1>React / Webpack SPA Boilerplate</h1>
-        </div>
+  return (
+    <div className={classes.wrapper}>
+      <div className={classes.content}>
+        <h1>TypeScript / React / Webpack SPA Boilerplate</h1>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-export default withStyles(styles)(About);
+export default About;

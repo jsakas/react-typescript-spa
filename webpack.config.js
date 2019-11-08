@@ -1,13 +1,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-const WebpackStats = require('webpack-visualizer-plugin');
 const { DefinePlugin } = require('webpack');
 
 
 module.exports = {
-  mode: process.env.WEBPACK_ENV == 'production' ? 'production' : 'development',
-  devtool: process.env.WEBPACK_ENV == 'production' ? 'source-map' : 'eval',
+  mode: process.env.WEBPACK_ENV === 'production' ? 'production' : 'development',
+  watch: process.env.WEBPACK_ENV === 'production' ? false : true,
+  devtool: process.env.WEBPACK_ENV === 'production' ? 'source-map' : 'eval',
   stats: 'errors-only',
   devServer: {
     host: '0.0.0.0',
@@ -38,16 +38,13 @@ module.exports = {
     }),
     new DefinePlugin({
       'APP_ENV': JSON.stringify(process.env.APP_ENV),
+      'SENTRY_DSN': JSON.stringify(''),
     }),
     new HtmlWebpackHarddiskPlugin(),
-    new WebpackStats({
-      filename: './bundle.html',
-    }),
   ],
   resolve: {
     alias: {
       '@components': path.resolve(__dirname, 'src', 'components'),
-      '@docs': path.resolve(__dirname, 'docs'),
       '@history': path.resolve(__dirname, 'src', 'history'),
       '@icons': path.resolve(__dirname, 'src', 'icons'),
       '@images': path.resolve(__dirname, 'src', 'images'),
@@ -56,6 +53,7 @@ module.exports = {
       '@styles': path.resolve(__dirname, 'src', 'styles'),
       '@utils': path.resolve(__dirname, 'src', 'utils'),
     },
+    extensions: [ '.tsx', '.ts', '.js' ],
   },
   module: {
     rules: [

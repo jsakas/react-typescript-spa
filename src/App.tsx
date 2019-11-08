@@ -1,64 +1,59 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { TransitionGroup, Transition } from 'react-transition-group';
+
+import clsx from 'clsx';
+
 import history from '@history';
 import ROUTES from '@routes';
 
-import withStyles from '@utils/withStyles';
-import styles from './App.style.js';
+import useStyles from './App.style';
 
-const getBaseRoute = location => location.pathname.split('/').filter(i => i)[0];
+const getBaseRoute = (location: Location): string => location.pathname.split('/').filter(i => i)[0];
 
-class App extends Component {
-  render() {
-    return (
-      <Router history={history}>
-        <Switch>
-          <Route>
-            <div className="App">
-              <Route key={getBaseRoute(history.location)} render={({ location }) => {
-                return (
-                  <TransitionGroup component={null}>
-
-                    <Transition key={`${history.location.pathname}--page`} timeout={1000}>
-                      {(state) => {
-                        return (
-                          <div className={`App__page App__page-transition App__page-transition--${state} App__page--gradient-mask`}>
-                            <Switch location={location}>
-                              {Object.keys(ROUTES).map((route) => {
-                                let Page = ROUTES[route].component;
+const App: React.FC = () => {
+  const classes: Classes = useStyles();
+  return (
+    <Router history={history}>
+      <Switch>
+        <Route key={getBaseRoute(history.location)} render={({ location }) => {
+          return (
+            <TransitionGroup component={null}>
+              <Transition key={`${history.location.pathname}--page`} timeout={1000}>
+                {(state) => {
+                  return (
+                    <div className={clsx(classes.routeWrapper, classes[state])}>
+                      <Switch location={location}>
+                        {Object.keys(ROUTES).map((route) => {
+                          const Page = ROUTES[route].component;
+                          return (
+                            <Route
+                              exact
+                              key={location.pathname}
+                              path={ROUTES[route].path}
+                              render={() => {
                                 return (
-                                  <Route 
-                                    exact
-                                    key={location.pathname}
-                                    path={ROUTES[route].path} 
-                                    render={() => {
-                                      return (
-                                        <div className="App__page-wrapper">
-                                          <div className="App__page-content">
-                                            <Page />
-                                          </div>
-                                        </div>
-                                      );
-                                    }}
-                                  />
+                                  <div className={classes.pageWrapper}>
+                                    <div className={classes.pageContent}>
+                                      <Page />
+                                    </div>
+                                  </div>
                                 );
-                              })}
-                            </Switch>
-                          </div>
-                        );
-                      }}
-                    </Transition>
+                              }}
+                            />
+                          );
+                        })}
+                      </Switch>
+                    </div>
+                  );
+                }}
+              </Transition>
+            </TransitionGroup>
+          );
+        }} />
+      </Switch>
+    </Router>
+  );
+};
 
-                  </TransitionGroup>
-                );
-              }} />
-            </div>
-          </Route>
-        </Switch>
-      </Router>
-    );
-  }
-}
-
-export default withStyles(styles)(App);
+export default App;

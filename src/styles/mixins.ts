@@ -1,17 +1,22 @@
 
-export const animate_once = (name, time, offset = 0) => `
-  animation-name: ${name};
-  animation-duration: ${time};
-  animation-delay: ${offset};
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
-`;
+export const animateOnce = (name: string, time: string, offset = '0s') => {
+  return {
+    animationName: name,
+    animationDuration: time,
+    animationDelay: offset,
+    animationIterationCount: 1,
+    animationFillMode: 'forwards',
+    animationTimingFunction: 'linear',
+  };
+};
 
-export const animate_loop = (name, time, offset = 0) => `
-  animation-name: ${name};
-  animation-duration: ${time};
-  animation-delay: ${offset};
-  animation-iteration-count: infinite;
-  animation-fill-mode: forwards;
-  animation-timing-function: linear;
-`;
+export const animateLoop = (name: string, time: string, offset = '0s') => {
+  return {
+    animationName: name,
+    animationDuration: time,
+    animationDelay: offset,
+    animationIterationCount: 'infinite',
+    animationFillMode: 'forwards',
+    animationTimingFunction: 'linear',
+  };
+};

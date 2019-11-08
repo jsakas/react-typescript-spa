@@ -1,6 +1,12 @@
 #!/bin/bash
 
-# recursively walk directory
+# recursively walk directory and convert javascript files to typescript files
+# 
+# .style.js -> .style.ts
+# .js -> .tsx
+#
+# Usage `./convert-ts.sh src`
+#
 
 function traverse() {   
     for file in $(ls "$1")

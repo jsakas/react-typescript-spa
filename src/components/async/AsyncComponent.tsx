@@ -1,4 +1,68 @@
-import React from 'react';
+import * as React from 'react';
+import { Component, ReactType } from 'react';
+
+enum LoadState {
+  Pending = 'PENDING',
+  Complete = 'COMPLETE',
+  Error = 'ERROR',
+}
+
+type Module = {
+  default: any;
+  [key: string]: any;
+}
+
+type AsyncComponentProps = {
+  /**
+   * Called if fetchData and resolve complete successfully
+   */
+  onComplete?: Function;
+  /**
+   * Called if an error is thrown from props.resolve or props.fetchData
+   */
+  onError?: Function;
+  /**
+   * The resolver function which should return a ES6 module in the format { default }
+   */
+  resolve: Function;
+  /**
+   * A promise containing any data the resolved component needs on mount
+   */
+  fetchData?: Function;
+  /**
+   * The component to display if the resolver promise has not completed.
+   */
+  Loading: ReactType;
+  /**
+   * The component to display if the resolver promise has errored.
+   */
+  Errored: ReactType;
+
+  /**
+   * All extra props are passed to loading, errored, or rendered component
+   */
+  [x: string]: any;
+}
+
+type AsyncComponentState = {
+  /**
+   * Most recent error object
+   */
+  error: Error;
+
+  /**
+   * The current state of the loaded component.
+   */
+  status: LoadState;
+  /**
+   * Component The resolved component.
+   */
+  Component: ReactType;
+  /**
+   * The data fetched from the fetchData prop.
+   */
+  data: object;
+}
 
 /**
  * This component is used to render components loaded asyncronously. Its most useful for resolving
@@ -10,66 +74,75 @@ import React from 'react';
  *
  * where the default export of ./SomeOtherComponent.js is a React component.
  */
-class AsyncComponent extends React.Component {
-  state = {
-    /**
-     * @typedef {String} status The current state of the loaded component.
-     */
-    status: 'PENDING',
-    /**
-     * @typedef {React.Component} Component The resolved component.
-     */
+class AsyncComponent extends Component<AsyncComponentProps, AsyncComponentState> {
+  unmounted = false;
+  mounted = false;
+  
+  static defaultProps: AsyncComponentProps = {
+    onComplete: console.log,
+    onError: console.error,
+    resolve: null,
+    fetchData: () => new Promise(resolve => resolve()),
+    Loading: () => null,
+    Errored: () => null,
+  }
+
+  state: AsyncComponentState = {
+    error: null,
+    status: LoadState.Pending,
     Component: null,
-    /**
-     * @typedef {Object} data The data fetched from the fetchData prop.
-     */
     data: {},
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.loadModule();
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.unmounted = true;
   }
 
-  handleError = error => {
-    this.props.onError(error);
+  handleError = (error: Error) => {
+    typeof this.props.onError === 'function' && this.props.onError(error);
     return !this.unmounted && this.setState({
       error,
-      status: 'ERROR',
+      status: LoadState.Error,
     });
   }
 
-  handleLoad = ([ module, data ]) => {
-    this.props.onComplete(data);
+  handleLoad = ([module, data]: [Module, object]) => {
+    typeof this.props.onComplete === 'function' && this.props.onComplete(data);
     return !this.unmounted && this.setState({
       Component: module.default,
       data,
-      status: 'COMPLETE',
+      status: LoadState.Complete,
     });
   }
 
-  loadModule () {
+  loadModule() {
     if (typeof this.props.resolve !== 'function') {
       return this.handleError(
         new Error(`Expected resolve to be typeof function, got ${typeof this.props.resolve}`)
       );
     }
 
-    Promise.all([
+    const promises: [Promise<Module>, Promise<object>] = [
       this.props.resolve(),
       this.props.fetchData(this.props),
-    ])
+    ];
+    Promise.all(promises)
       .then(this.handleLoad)
       .catch(this.handleError);
   }
 
-  render () {
+  render() {
     const {
-      Errored,
-      Loading,
+      Errored,    // eslint-disable-line @typescript-eslint/no-unused-vars
+      Loading,    // eslint-disable-line @typescript-eslint/no-unused-vars
+      onComplete, // eslint-disable-line @typescript-eslint/no-unused-vars
+      onError,    // eslint-disable-line @typescript-eslint/no-unused-vars
+      resolve,    // eslint-disable-line @typescript-eslint/no-unused-vars
+      fetchData,  // eslint-disable-line @typescript-eslint/no-unused-vars
       ...extra
     } = this.props;
 
@@ -80,43 +153,16 @@ class AsyncComponent extends React.Component {
       status,
     } = this.state;
 
-    if (status === 'PENDING') {
-      return <Loading {...extra} />;
+    if (status === LoadState.Pending) {
+      return <Loading />;
     }
 
-    if (status === 'ERROR') {
-      return <Errored {...extra} error={error} />;
+    if (status === LoadState.Error) {
+      return <Errored error={error} />;
     }
 
     return <Component {...extra} data={data} />;
   }
 }
-
-AsyncComponent.defaultProps = {
-  /**
-   * @type {function} Called if fetchData and resolve complete successfully
-   */
-  onComplete: () => {},
-  /**
-   * @type {function} Called if an error is thrown from props.resolve or props.fetchData
-   */
-  onError: () => {},
-  /**
-   * @typedef {Promise} resolve The resolver function which should return a ES6 module in the format { default }
-   */
-  resolve: null,
-  /**
-   * @typedef {Promise} return a promise containing any data the resolved component needs on mount
-   */
-  fetchData: () => new Promise(resolve => resolve()),
-  /**
-   * @typedef {React.Component} The component to display if the resolver promise has not completed.
-   */
-  Loading: () => null,
-  /**
-   * @typedef {React.Component} The component to display if the resolver promise has errored.
-   */
-  Errored: () => null,
-};
 
 export default AsyncComponent;
