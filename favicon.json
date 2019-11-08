@@ -1,0 +1,21 @@
+{
+    "appName": "Sample App",
+    "appShortName": "Sample App",
+    "appDescription": null,
+    "developerName": "Jon Sakas",
+    "developerURL": "https://jon.sakas.co",
+    "lang": "en-US",
+    "background": "#fff",
+    "theme_color": "#fff",
+    "appleStatusBarStyle": "black-translucent",
+    "icons": {
+        "android": true,
+        "appleIcon": true,
+        "appleStartup": true,
+        "coast": true,
+        "favicons": true,
+        "firefox": true,
+        "windows": true,
+        "yandex": true
+    }
+}

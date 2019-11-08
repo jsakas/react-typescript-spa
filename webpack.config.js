@@ -2,7 +2,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const { DefinePlugin } = require('webpack');
+const WebappWebpackPlugin = require('webapp-webpack-plugin');
 
+const faviconConfig = require('./favicon.json');
 
 module.exports = {
   mode: process.env.WEBPACK_ENV === 'production' ? 'production' : 'development',
@@ -35,6 +37,13 @@ module.exports = {
       head: ['sentry'],
       body: ['main'],
       alwaysWriteToDisk: true,
+    }),
+    new WebappWebpackPlugin({
+      logo: path.resolve(__dirname, 'src', 'images', 'ts.png'),
+      publicPath: '/static/',
+      cache: true,
+      inject: 'force',
+      favicons: faviconConfig,
     }),
     new DefinePlugin({
       'APP_ENV': JSON.stringify(process.env.APP_ENV),
@@ -77,12 +86,23 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpg|gif|wav|mp3)$/,
+        test: /\.(png|jpg|gif)$/,
         use: [
           {
             loader: 'file-loader',
           }
         ]
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              icon: true,
+            }
+          }
+        ],
       }
     ]
   },
